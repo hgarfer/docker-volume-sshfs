@@ -1,0 +1,28 @@
+version: 2
+updates:
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "00:00"
+      timezone: "Europe/London"
+
+  # Maintain dependencies for Go modules
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "00:00"
+      timezone: "Europe/London"
+
+  # Maintain dependencies for Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "00:00"
+      timezone: "Europe/London"
