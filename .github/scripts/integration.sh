@@ -12,7 +12,6 @@ TAG=test
 #sudo apt-get -y install docker-ce
 
 # install
-sudo docker pull ubuntu:22.04
 sudo docker pull busybox
 
 docker build -t sshd .github/ssh
