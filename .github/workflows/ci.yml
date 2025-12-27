@@ -34,16 +34,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Set up Docker
-        run: |
-          # Docker is already installed on GitHub Actions runners
-          docker --version
-      
-      - name: Pull Docker images
-        run: |
-          docker pull ubuntu:22.04
-          docker pull busybox
-      
       - name: Build SSH server image
         run: docker build -t sshd .github/ssh
       
