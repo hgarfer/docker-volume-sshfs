@@ -41,7 +41,6 @@ jobs:
       
       - name: Pull Docker images
         run: |
-          docker pull ubuntu:22.04
           docker pull busybox
       
       - name: Build SSH server image
