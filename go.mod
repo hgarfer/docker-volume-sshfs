@@ -1,6 +1,6 @@
 module github.com/hgarfer/docker-volume-sshfs
 
-go 1.25.5
+go 1.21
 
 require (
 	github.com/docker/go-plugins-helpers v0.0.0-20240701071450-45e2431495c8
