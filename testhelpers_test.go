@@ -286,7 +286,7 @@ func TestTestHelpers(t *testing.T) {
 		}
 
 		// Create file
-		if err := os.WriteFile(testFile, []byte("test"), 0644); err != nil {
+		if err := os.WriteFile(testFile, []byte("test"), 0o644); err != nil {
 			t.Fatalf("Failed to write test file: %v", err)
 		}
 

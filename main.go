@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -47,7 +46,7 @@ func newSshfsDriver(root string) (*sshfsDriver, error) {
 		volumes:   map[string]*sshfsVolume{},
 	}
 
-	data, err := ioutil.ReadFile(d.statePath)
+	data, err := os.ReadFile(d.statePath)
 	if err != nil {
 		if os.IsNotExist(err) {
 			logrus.WithField("statePath", d.statePath).Debug("no state found")
@@ -70,12 +69,13 @@ func (d *sshfsDriver) saveState() {
 		return
 	}
 
-	if err := ioutil.WriteFile(d.statePath, data, 0644); err != nil {
+	if err := os.WriteFile(d.statePath, data, 0o644); err != nil {
 		logrus.WithField("savestate", d.statePath).Error(err)
 	}
 }
 
 func (d *sshfsDriver) Create(r *volume.CreateRequest) error {
+
 	logrus.WithField("method", "create").Debugf("%#v", r)
 
 	d.Lock()
@@ -161,7 +161,7 @@ func (d *sshfsDriver) Mount(r *volume.MountRequest) (*volume.MountResponse, erro
 	if v.connections == 0 {
 		fi, err := os.Lstat(v.Mountpoint)
 		if os.IsNotExist(err) {
-			if err := os.MkdirAll(v.Mountpoint, 0755); err != nil {
+			if err := os.MkdirAll(v.Mountpoint, 0o755); err != nil {
 				return &volume.MountResponse{}, logError("%s", err.Error())
 			}
 		} else if err != nil {
