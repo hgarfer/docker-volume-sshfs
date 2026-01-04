@@ -66,7 +66,7 @@ func setupSSHDContainer(t *testing.T) (string, func()) {
 
 	// Build the SSH container
 	ctx := context.Background()
-	buildCmd := exec.CommandContext(ctx, "docker", "build", "-t", "sshfs-test-sshd", ".travis/ssh")
+	buildCmd := exec.CommandContext(ctx, "docker", "build", "-t", "sshfs-test-sshd", "testdata/ssh")
 	buildCmd.Dir = "."
 	if output, err := buildCmd.CombinedOutput(); err != nil {
 		t.Skipf("Failed to build SSH container: %v\n%s", err, output)
