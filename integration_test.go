@@ -256,7 +256,7 @@ func TestIntegrationStatePersistence(t *testing.T) {
 
 	// Create state directory
 	stateDir := filepath.Join(tmpDir, "state")
-	if err := os.MkdirAll(stateDir, 0755); err != nil {
+	if err := os.MkdirAll(stateDir, 0o755); err != nil {
 		t.Fatalf("Failed to create state dir: %v", err)
 	}
 

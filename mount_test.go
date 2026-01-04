@@ -4,14 +4,11 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/docker/go-plugins-helpers/volume"
 )
@@ -35,7 +32,7 @@ func TestMountUnmount(t *testing.T) {
 		}
 
 		// Create mountpoint directory
-		if err := os.MkdirAll(driver.volumes["test-volume"].Mountpoint, 0755); err != nil {
+		if err := os.MkdirAll(driver.volumes["test-volume"].Mountpoint, 0o755); err != nil {
 			t.Fatalf("Failed to create mountpoint: %v", err)
 		}
 
@@ -72,7 +69,7 @@ func TestMountUnmount(t *testing.T) {
 			connections: 0,
 		}
 
-		if err := os.MkdirAll(mountpoint, 0755); err != nil {
+		if err := os.MkdirAll(mountpoint, 0o755); err != nil {
 			t.Fatalf("Failed to create mountpoint: %v", err)
 		}
 

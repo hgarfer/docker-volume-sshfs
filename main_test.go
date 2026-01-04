@@ -19,7 +19,7 @@ func setupTestDriver(t *testing.T) (*sshfsDriver, string) {
 
 	// Create state directory
 	stateDir := filepath.Join(tmpDir, "state")
-	if err := os.MkdirAll(stateDir, 0755); err != nil {
+	if err := os.MkdirAll(stateDir, 0o755); err != nil {
 		t.Fatalf("Failed to create state dir: %v", err)
 	}
 
@@ -68,7 +68,7 @@ func TestNewSshfsDriver(t *testing.T) {
 		defer cleanupTestDriver(tmpDir)
 
 		stateDir := filepath.Join(tmpDir, "state")
-		if err := os.MkdirAll(stateDir, 0755); err != nil {
+		if err := os.MkdirAll(stateDir, 0o755); err != nil {
 			t.Fatalf("Failed to create state dir: %v", err)
 		}
 
@@ -87,7 +87,7 @@ func TestNewSshfsDriver(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Failed to marshal state: %v", err)
 		}
-		if err := os.WriteFile(statePath, data, 0644); err != nil {
+		if err := os.WriteFile(statePath, data, 0o644); err != nil {
 			t.Fatalf("Failed to write state file: %v", err)
 		}
 
@@ -277,7 +277,7 @@ func TestRemove(t *testing.T) {
 		}
 
 		// Create the mountpoint directory
-		if err := os.MkdirAll(mountpoint, 0755); err != nil {
+		if err := os.MkdirAll(mountpoint, 0o755); err != nil {
 			t.Fatalf("Failed to create mountpoint: %v", err)
 		}
 
