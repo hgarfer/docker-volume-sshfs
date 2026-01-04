@@ -13,8 +13,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/docker/go-plugins-helpers/volume"
+	"github.com/sirupsen/logrus"
 )
 
 const socketAddress = "/run/docker/plugins/sshfs.sock"
@@ -126,7 +126,7 @@ func (d *sshfsDriver) Remove(r *volume.RemoveRequest) error {
 		return logError("volume %s is currently used by a container", r.Name)
 	}
 	if err := os.RemoveAll(v.Mountpoint); err != nil {
-		return logError(err.Error())
+		return logError("%s", err.Error())
 	}
 	delete(d.volumes, r.Name)
 	d.saveState()
@@ -162,10 +162,10 @@ func (d *sshfsDriver) Mount(r *volume.MountRequest) (*volume.MountResponse, erro
 		fi, err := os.Lstat(v.Mountpoint)
 		if os.IsNotExist(err) {
 			if err := os.MkdirAll(v.Mountpoint, 0755); err != nil {
-				return &volume.MountResponse{}, logError(err.Error())
+				return &volume.MountResponse{}, logError("%s", err.Error())
 			}
 		} else if err != nil {
-			return &volume.MountResponse{}, logError(err.Error())
+			return &volume.MountResponse{}, logError("%s", err.Error())
 		}
 
 		if fi != nil && !fi.IsDir() {
@@ -173,7 +173,7 @@ func (d *sshfsDriver) Mount(r *volume.MountRequest) (*volume.MountResponse, erro
 		}
 
 		if err := d.mountVolume(v); err != nil {
-			return &volume.MountResponse{}, logError(err.Error())
+			return &volume.MountResponse{}, logError("%s", err.Error())
 		}
 	}
 
@@ -196,7 +196,7 @@ func (d *sshfsDriver) Unmount(r *volume.UnmountRequest) error {
 
 	if v.connections <= 0 {
 		if err := d.unmountVolume(v.Mountpoint); err != nil {
-			return logError(err.Error())
+			return logError("%s", err.Error())
 		}
 		v.connections = 0
 	}
