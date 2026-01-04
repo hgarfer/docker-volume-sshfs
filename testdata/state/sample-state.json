@@ -1,0 +1,18 @@
+{
+  "test-volume-1": {
+    "Password": "testpass123",
+    "Sshcmd": "testuser@testhost:/data",
+    "Port": "2222",
+    "Options": ["allow_other", "compression=yes"],
+    "Mountpoint": "/mnt/volumes/abc123",
+    "connections": 0
+  },
+  "test-volume-2": {
+    "Password": "",
+    "Sshcmd": "user@example.com:/home/user/files",
+    "Port": "22",
+    "Options": ["Compression=no"],
+    "Mountpoint": "/mnt/volumes/def456",
+    "connections": 1
+  }
+}
