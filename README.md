@@ -1,5 +1,13 @@
 # Docker volume plugin for sshFS
 
+## ⚠️ WARNING
+
+**This fork is currently being modernized using AI assistance and is NOT safe for production use.**
+
+This project was archived 8 years ago and is undergoing significant updates to bring it up to current standards and best practices. Until this warning is removed, do not use this plugin in any production environment or with sensitive data.
+
+---
+
 This plugin allows you to mount remote folder using sshfs in your container easily.
 
 [![TravisCI](https://travis-ci.org/hgarfer/docker-volume-sshfs.svg)](https://travis-ci.org/hgarfer/docker-volume-sshfs)
