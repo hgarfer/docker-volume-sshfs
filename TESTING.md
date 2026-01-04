@@ -272,7 +272,7 @@ If integration tests fail, check:
 
 1. Docker is running: `docker ps`
 2. Port 2222 is available
-3. SSH server container can be built: `docker build -t sshfs-test-sshd .travis/ssh`
+3. SSH server container can be built: `docker build -t sshfs-test-sshd testdata/ssh`
 
 ### Tests Hang
 
