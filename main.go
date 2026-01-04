@@ -238,7 +238,7 @@ func (d *sshfsDriver) Capabilities() *volume.CapabilitiesResponse {
 }
 
 func (d *sshfsDriver) mountVolume(v *sshfsVolume) error {
-	cmd := exec.Command("sshfs", "-oStrictHostKeyChecking=no", v.Sshcmd, v.Mountpoint)
+	cmd := exec.Command("sshfs", "-oStrictHostKeyChecking=no", "-oUserKnownHostsFile=/dev/null", v.Sshcmd, v.Mountpoint)
 	if v.Port != "" {
 		cmd.Args = append(cmd.Args, "-p", v.Port)
 	}
