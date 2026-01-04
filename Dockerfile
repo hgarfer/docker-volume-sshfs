@@ -1,6 +1,6 @@
 FROM golang:1.10-alpine as builder
-COPY . /go/src/github.com/vieux/docker-volume-sshfs
-WORKDIR /go/src/github.com/vieux/docker-volume-sshfs
+COPY . /go/src/github.com/hgarfer/docker-volume-sshfs
+WORKDIR /go/src/github.com/hgarfer/docker-volume-sshfs
 RUN set -ex \
     && apk add --no-cache --virtual .build-deps \
     gcc libc-dev \
