@@ -30,7 +30,7 @@ type integrationTestConfig struct {
 func getIntegrationConfig() *integrationTestConfig {
 	return &integrationTestConfig{
 		skipIfNotAvailable: os.Getenv("INTEGRATION_TESTS") != "1",
-		sshHost:            getEnvOrDefault("SSH_TEST_HOST", "localhost"),
+		sshHost:            getEnvOrDefault("SSH_TEST_HOST", "127.0.0.1"),
 		sshPort:            getEnvOrDefault("SSH_TEST_PORT", "2222"),
 		sshUser:            getEnvOrDefault("SSH_TEST_USER", "root"),
 		sshPassword:        getEnvOrDefault("SSH_TEST_PASSWORD", "root"),

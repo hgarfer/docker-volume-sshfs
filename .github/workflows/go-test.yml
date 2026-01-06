@@ -26,7 +26,14 @@ jobs:
         cache: true
 
     - name: Install dependencies
-      run: make deps
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y sshfs
+        # Configure fuse to allow other users
+        echo "user_allow_other" | sudo tee -a /etc/fuse.conf
+        sudo chmod 644 /etc/fuse.conf
+        sshfs --version
+        make deps
 
     - name: Run Unit Tests
       run: make ci-unit

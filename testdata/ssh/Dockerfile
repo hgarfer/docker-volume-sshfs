@@ -5,9 +5,10 @@ RUN apk add --no-cache openssh
 # Generate host keys
 RUN ssh-keygen -A
 
-# Add test user
+# Add test user and set root password
 RUN adduser -D testuser && \
-    echo "testuser:testpass" | chpasswd
+    echo "testuser:testpass" | chpasswd && \
+    echo "root:root" | chpasswd
 
 # Prepare ssh config
 RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
