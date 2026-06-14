@@ -1,0 +1,89 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+
+      - name: Pull base images
+        run: |
+          docker pull rastasheep/ubuntu-sshd
+          docker pull busybox
+
+      - name: Build SSH test image
+        run: docker build -t sshd .travis/ssh
+
+      - name: Build plugin
+        run: sudo PLUGIN_TAG=test make
+
+      - name: Enable plugin
+        run: sudo docker plugin enable vieux/sshfs:test
+
+      - name: List plugins
+        run: sudo docker plugin ls
+
+      - name: Start SSH server
+        run: sudo docker run -d -p 2222:22 sshd
+
+      - name: Test 1 - simple mount
+        run: |
+          sudo docker volume create -d vieux/sshfs:test \
+            -o sshcmd=root@localhost:/ -o port=2222 -o password=root sshvolume
+          sudo docker run --rm -v sshvolume:/write busybox sh -c "echo hello > /write/world"
+          sudo docker run --rm -v sshvolume:/read busybox grep -Fxq hello /read/world
+          sudo docker volume rm sshvolume
+
+      - name: Test 2 - allow_other
+        run: |
+          sudo docker volume create -d vieux/sshfs:test \
+            -o sshcmd=root@localhost:/ -o allow_other -o port=2222 -o password=root sshvolume
+          sudo docker run --rm -v sshvolume:/write -u nobody busybox sh -c "echo hello > /write/world"
+          sudo docker run --rm -v sshvolume:/read -u nobody busybox grep -Fxq hello /read/world
+          sudo docker volume rm sshvolume
+
+      - name: Test 3 - compression options
+        run: |
+          sudo docker volume create -d vieux/sshfs:test \
+            -o sshcmd=root@localhost:/ -o Ciphers=arcfour -o Compression=no \
+            -o port=2222 -o password=root sshvolume
+          sudo docker run --rm -v sshvolume:/write busybox sh -c "echo hello > /write/world"
+          sudo docker run --rm -v sshvolume:/read busybox grep -Fxq hello /read/world
+          sudo docker volume rm sshvolume
+
+      - name: Test 4 - custom state source
+        run: |
+          sudo docker plugin disable vieux/sshfs:test
+          sudo docker plugin set vieux/sshfs:test state.source=/tmp
+          sudo docker plugin enable vieux/sshfs:test
+          sudo docker volume create -d vieux/sshfs:test \
+            -o sshcmd=root@localhost:/ -o Ciphers=arcfour -o Compression=no \
+            -o port=2222 -o password=root sshvolume
+          sudo docker run --rm -v sshvolume:/write busybox sh -c "echo hello > /write/world"
+          sudo docker run --rm -v sshvolume:/read busybox grep -Fxq hello /read/world
+          sudo docker volume rm sshvolume
+
+      - name: Test 5 - SSH key auth
+        run: |
+          sudo docker plugin disable vieux/sshfs:test
+          sudo docker plugin set vieux/sshfs:test sshkey.source="$(pwd)/.travis/ssh/"
+          sudo docker plugin enable vieux/sshfs:test
+          sudo docker volume create -d vieux/sshfs:test \
+            -o sshcmd=root@localhost:/ -o port=2222 sshvolume
+          sudo docker run --rm -v sshvolume:/write busybox sh -c "echo hello > /write/world"
+          sudo docker run --rm -v sshvolume:/read busybox grep -Fxq hello /read/world
+          sudo docker volume rm sshvolume
