@@ -32,7 +32,7 @@ jobs:
         run: sudo PLUGIN_TAG=test make
 
       - name: Enable plugin
-        run: sudo docker plugin enable vieux/sshfs:test
+        run: sudo docker plugin enable hgarfer/sshfs:test
 
       - name: List plugins
         run: sudo docker plugin ls
@@ -42,7 +42,7 @@ jobs:
 
       - name: Test 1 - simple mount
         run: |
-          sudo docker volume create -d vieux/sshfs:test \
+          sudo docker volume create -d hgarfer/sshfs:test \
             -o sshcmd=root@localhost:/ -o port=2222 -o password=root sshvolume
           sudo docker run --rm -v sshvolume:/write busybox sh -c "echo hello > /write/world"
           sudo docker run --rm -v sshvolume:/read busybox grep -Fxq hello /read/world
@@ -50,7 +50,7 @@ jobs:
 
       - name: Test 2 - allow_other
         run: |
-          sudo docker volume create -d vieux/sshfs:test \
+          sudo docker volume create -d hgarfer/sshfs:test \
             -o sshcmd=root@localhost:/ -o allow_other -o port=2222 -o password=root sshvolume
           sudo docker run --rm -v sshvolume:/write -u nobody busybox sh -c "echo hello > /write/world"
           sudo docker run --rm -v sshvolume:/read -u nobody busybox grep -Fxq hello /read/world
@@ -58,7 +58,7 @@ jobs:
 
       - name: Test 3 - compression options
         run: |
-          sudo docker volume create -d vieux/sshfs:test \
+          sudo docker volume create -d hgarfer/sshfs:test \
             -o sshcmd=root@localhost:/ -o Ciphers=arcfour -o Compression=no \
             -o port=2222 -o password=root sshvolume
           sudo docker run --rm -v sshvolume:/write busybox sh -c "echo hello > /write/world"
@@ -67,10 +67,10 @@ jobs:
 
       - name: Test 4 - custom state source
         run: |
-          sudo docker plugin disable vieux/sshfs:test
-          sudo docker plugin set vieux/sshfs:test state.source=/tmp
-          sudo docker plugin enable vieux/sshfs:test
-          sudo docker volume create -d vieux/sshfs:test \
+          sudo docker plugin disable hgarfer/sshfs:test
+          sudo docker plugin set hgarfer/sshfs:test state.source=/tmp
+          sudo docker plugin enable hgarfer/sshfs:test
+          sudo docker volume create -d hgarfer/sshfs:test \
             -o sshcmd=root@localhost:/ -o Ciphers=arcfour -o Compression=no \
             -o port=2222 -o password=root sshvolume
           sudo docker run --rm -v sshvolume:/write busybox sh -c "echo hello > /write/world"
@@ -79,10 +79,10 @@ jobs:
 
       - name: Test 5 - SSH key auth
         run: |
-          sudo docker plugin disable vieux/sshfs:test
-          sudo docker plugin set vieux/sshfs:test sshkey.source="$(pwd)/.travis/ssh/"
-          sudo docker plugin enable vieux/sshfs:test
-          sudo docker volume create -d vieux/sshfs:test \
+          sudo docker plugin disable hgarfer/sshfs:test
+          sudo docker plugin set hgarfer/sshfs:test sshkey.source="$(pwd)/.travis/ssh/"
+          sudo docker plugin enable hgarfer/sshfs:test
+          sudo docker volume create -d hgarfer/sshfs:test \
             -o sshcmd=root@localhost:/ -o port=2222 sshvolume
           sudo docker run --rm -v sshvolume:/write busybox sh -c "echo hello > /write/world"
           sudo docker run --rm -v sshvolume:/read busybox grep -Fxq hello /read/world
